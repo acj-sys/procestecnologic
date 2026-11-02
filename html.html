@@ -1,0 +1,173 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Exercicis del taller</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: una sola activitat per pantalla, botons grans, mateixa posició per a cada control. */
+:root{
+  --bg:#F3F7F6; --card:#FFFFFF; --fg:#1D2B2E; --muted:#56696C; --line:#C9D9D6;
+  --accent:#1F6F78; --accent-fg:#FFFFFF; --ok:#2E7D4F; --ok-bg:#DDF1E4; --hint:#B7791F; --hint-bg:#FFF1CF;
+  --yellow:#F2C94C; --blue:#5B9BD5; --green:#6DBE73;
+  --font:"Atkinson Hyperlegible",Verdana,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121C1E; --card:#1B2A2D; --fg:#EAF2F1; --muted:#9DB4B7; --line:#34494C;
+  --accent:#5FC0CB; --accent-fg:#0E1A1C; --ok:#7FD19C; --ok-bg:#1F3A2A; --hint:#F0C36A; --hint-bg:#3A3018; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121C1E; --card:#1B2A2D; --fg:#EAF2F1; --muted:#9DB4B7; --line:#34494C;
+  --accent:#5FC0CB; --accent-fg:#0E1A1C; --ok:#7FD19C; --ok-bg:#1F3A2A; --hint:#F0C36A; --hint-bg:#3A3018; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:20px;line-height:1.45;
+  padding-block:16px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dots{display:flex;gap:6px;flex:1;min-width:140px}
+.dot{height:10px;flex:1;border-radius:6px;background:var(--line)}
+.dot.done{background:var(--accent)} .dot.now{background:var(--accent);opacity:.45}
+.count{color:var(--muted);font-size:18px;white-space:nowrap}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
+.tool{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 14px;min-height:48px}
+.screen{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px}
+.step{color:var(--accent);font-weight:700;font-size:17px;letter-spacing:.06em;text-transform:uppercase}
+h1,h2{margin:0;text-wrap:balance;line-height:1.2}
+h1{font-size:34px} h2{font-size:28px}
+.scene{font-size:64px;line-height:1;text-align:center;padding:6px 0}
+.ask{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.opts{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.opt{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 12px;min-height:128px;border:3px solid var(--line);border-radius:18px;background:var(--bg);font-weight:700;text-align:center}
+.opt .e{font-size:48px;line-height:1}
+.opt:hover{border-color:var(--accent)}
+.opt.try{opacity:.5;border-style:dashed}
+.opt.right{background:var(--ok-bg);border-color:var(--ok)}
+.opt.hint{background:var(--hint-bg);border-color:var(--hint)}
+.y{border-left:12px solid var(--yellow)} .b{border-left:12px solid var(--blue)} .g{border-left:12px solid var(--green)}
+.msg{min-height:34px;font-weight:700;font-size:21px}
+.msg.ok{color:var(--ok)} .msg.soft{color:var(--hint)}
+.primary{background:var(--accent);color:var(--accent-fg);border:0;border-radius:16px;padding:16px 28px;font-weight:700;font-size:22px;min-height:60px;align-self:flex-start}
+.slots{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.slot{border:3px dashed var(--line);border-radius:16px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;padding:8px;font-weight:700}
+.slot .n{color:var(--muted);font-size:18px} .slot.full{border-style:solid;border-color:var(--ok);background:var(--ok-bg)}
+.slot .e{font-size:38px;line-height:1}
+.pad{display:flex;flex-direction:column;gap:10px}
+canvas{width:100%;aspect-ratio:4/3;background:#fff;border:3px solid var(--line);border-radius:16px;touch-action:none;cursor:crosshair}
+.colors{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sw{width:48px;height:48px;border-radius:50%;border:4px solid var(--line);padding:0}
+.sw[aria-pressed="true"]{border-color:var(--fg)}
+label{font-weight:700}
+input[type=text]{font:inherit;width:100%;box-sizing:border-box;padding:12px 14px;border:3px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg)}
+.calm{text-align:center;align-items:center}
+.calm .big{font-size:80px}
+.breath{width:120px;height:120px;border-radius:50%;background:var(--accent);opacity:.35;animation:b 8s ease-in-out infinite}
+@keyframes b{0%,100%{transform:scale(.7)}50%{transform:scale(1.15)}}
+@media (prefers-reduced-motion:reduce){.breath{animation:none}}
+.stars{font-size:44px;letter-spacing:6px}
+</style>
+<main>
+  <header>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <span class="count" id="count"></span>
+    <button class="tool" id="pause" type="button">⏸ Pausa</button>
+  </header>
+  <section class="screen" id="screen" aria-live="polite"></section>
+</main>
+<script>
+const $=(s)=>document.querySelector(s);
+const say=(t)=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="ca-ES";u.rate=.85;speechSynthesis.speak(u)}catch(e){}};
+const bin={y:["Groc","🟡","plàstic i llaunes"],b:["Blau","🔵","paper i cartró"],g:["Verd","🟢","vidre"]};
+const Q=(step,scene,ask,opts,ans,hint,bin)=>({t:"quiz",step,scene,ask,opts,ans,hint,bin});
+const S=[
+ {t:"order"},
+ Q("Quin pas és?","🤔❓ Volem resoldre un problema: no trobem els llapis.","Quin pas del procés fem?",[["🤔","Identificar el problema"],["🔨","Construir"],["📣","Presentar"]],0,"Primer pensem què cal resoldre."),
+ Q("Quin pas és?","✏️📏 Dibuixem l'invent i hi posem les mides.","Quin pas del procés fem?",[["🔍","Investigar"],["✏️","Dissenyar"],["🔨","Construir"]],1,"Fem un dibuix abans de fer-lo."),
+ Q("Quin pas és?","🔨🧴 Ajuntem les peces amb cola.","Quin pas del procés fem?",[["🔨","Construir"],["🤔","Identificar el problema"],["✏️","Dissenyar"]],0,"Ja tenim el dibuix i fem l'objecte."),
+ Q("Reciclem","🍾","L'ampolla de plàstic va al contenidor...",[["🟡","Groc"],["🔵","Blau"],["🟢","Verd"]],0,"El plàstic va al groc.",1),
+ Q("Reciclem","📦","La caixa de cartró va al contenidor...",[["🟡","Groc"],["🔵","Blau"],["🟢","Verd"]],1,"El cartró va al blau.",1),
+ Q("Reciclem","🫙","El pot de vidre va al contenidor...",[["🟡","Groc"],["🔵","Blau"],["🟢","Verd"]],2,"El vidre va al verd.",1),
+ Q("Les eines","✂️","Vull tallar un cartró. Quina eina faig servir?",[["✂️","Tisores"],["📏","Regle"],["🧴","Cola"]],0,"Serveix per tallar."),
+ Q("Les eines","📏","Vull mesurar un tros de cartró. Quina eina faig servir?",[["✂️","Tisores"],["📏","Regle"],["🧴","Cola"]],1,"Té números."),
+ Q("Les eines","🧴","Vull enganxar dues peces. Quina eina faig servir?",[["📏","Regle"],["✂️","Tisores"],["🧴","Cola"]],2,"Fa que les peces s'enganxin."),
+ {t:"draw"},
+ {t:"end"}
+];
+let i=0,done=0,tries=0,order=[],state={},st=null;
+function dots(){const d=$("#dots");d.innerHTML=S.map((_,k)=>`<span class="dot ${k<i?"done":k===i?"now":""}"></span>`).join("");
+  $("#count").textContent=i<S.length-1?`${i+1} de ${S.length-1}`:"Final"}
+function render(){dots();tries=0;const el=$("#screen");el.className="screen";const s=S[i];
+  if(s.t==="order")return rOrder(el);
+  if(s.t==="quiz")return rQuiz(el,s);
+  if(s.t==="draw")return rDraw(el);
+  return rEnd(el)}
+function next(){i++;render();scrollTo(0,0)}
+function head(step,text){return `<div class="step">${step}</div><div class="ask"><h2 id="q">${text}</h2><button class="tool" type="button" id="say" aria-label="Escoltar">🔊 Escolta</button></div>`}
+function bindSay(t){$("#say").onclick=()=>say(t)}
+/* 1. ordenar */
+function rOrder(el){
+  const steps=[["🤔","Veig el problema"],["💡","Penso idees"],["✏️","Dibuixo"],["🔨","Construeixo"]];
+  const shuffled=[2,0,3,1];let nextIdx=0;
+  el.innerHTML=head("Ordena els passos","Toca els passos en ordre: primer, segon, tercer i quart.")+
+   `<div class="slots" id="slots">${steps.map((_,k)=>`<div class="slot" data-k="${k}"><span class="n">${k+1}</span></div>`).join("")}</div>
+    <div class="opts" id="cards">${shuffled.map(k=>`<button class="opt" type="button" data-k="${k}"><span class="e">${steps[k][0]}</span>${steps[k][1]}</button>`).join("")}</div>
+    <div class="msg" id="msg"></div><div id="nx"></div>`;
+  bindSay("Toca els passos en ordre: primer, segon, tercer i quart.");
+  el.querySelectorAll("#cards .opt").forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k,m=$("#msg");
+    if(k===nextIdx){const sl=el.querySelector(`.slot[data-k="${k}"]`);sl.classList.add("full");sl.innerHTML=`<span class="e">${steps[k][0]}</span>${steps[k][1]}`;b.remove();nextIdx++;
+      m.className="msg ok";m.textContent="Molt bé!";
+      if(nextIdx===4){done++;$("#nx").innerHTML=`<button class="primary" type="button" id="go">Continuar ➜</button>`;$("#go").onclick=next}
+    }else{m.className="msg soft";m.textContent="Gairebé! Mira quin pas va primer i torna-ho a provar.";
+      b.classList.add("try");setTimeout(()=>b.classList.remove("try"),1200);
+      if(++tries>=2){const h=el.querySelector(`#cards .opt[data-k="${nextIdx}"]`);if(h)h.classList.add("hint")}}
+  })}
+/* quiz */
+function rQuiz(el,s){
+  const col=["y","b","g"];
+  el.innerHTML=head(s.step,s.ask)+`<div class="scene" aria-hidden="true">${s.scene.split(" ")[0]}</div><p style="margin:0;color:var(--muted)">${s.scene.split(" ").slice(1).join(" ")}</p>
+   <div class="opts" id="opts">${s.opts.map((o,k)=>`<button class="opt ${s.bin?col[k]:""}" type="button" data-k="${k}"><span class="e">${o[0]}</span>${o[1]}</button>`).join("")}</div>
+   <div class="msg" id="msg"></div><div id="nx"></div>`;
+  bindSay(s.ask+" "+s.opts.map(o=>o[1]).join(", "));
+  let over=false;
+  el.querySelectorAll("#opts .opt").forEach(b=>b.onclick=()=>{
+    if(over)return;const k=+b.dataset.k,m=$("#msg");
+    if(k===s.ans){over=true;b.classList.remove("hint");b.classList.add("right");m.className="msg ok";m.textContent="Molt bé!";
+      if(tries===0)done++;$("#nx").innerHTML=`<button class="primary" type="button" id="go">Continuar ➜</button>`;$("#go").onclick=next;$("#go").focus()}
+    else{tries++;b.classList.add("try");m.className="msg soft";m.textContent=tries>=2?"Una pista: "+s.hint:"Gairebé! Torna-ho a provar.";
+      if(tries>=2)el.querySelector(`#opts .opt[data-k="${s.ans}"]`).classList.add("hint")}
+  })}
+/* dibuix */
+function rDraw(el){
+  el.innerHTML=head("El meu invent","Dibuixa el teu invent. Posa-hi els noms de les parts.")+
+   `<div><label for="nom">Com es diu el meu invent?</label><input id="nom" type="text" autocomplete="off" placeholder="Escriu el nom aquí"></div>
+    <div class="pad"><canvas id="cv" width="800" height="600" aria-label="Zona per dibuixar"></canvas>
+    <div class="colors" id="cols"></div></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="tool" id="clr" type="button">🧽 Esborra-ho tot</button><button class="primary" id="go" type="button">He acabat ➜</button></div>`;
+  bindSay("Dibuixa el teu invent. Posa-hi els noms de les parts.");
+  const cv=$("#cv"),cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,800,600);cx.lineCap="round";cx.lineJoin="round";cx.lineWidth=7;
+  let col="#1D2B2E",draw=false,last=null;
+  const C=["#1D2B2E","#1F6F78","#C0392B","#2E7D4F","#E1A100"];
+  $("#cols").innerHTML=C.map((c,k)=>`<button class="sw" type="button" aria-label="Color ${k+1}" aria-pressed="${k===0}" style="background:${c}" data-c="${c}"></button>`).join("");
+  el.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{col=b.dataset.c;el.querySelectorAll(".sw").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*800/r.width,(e.clientY-r.top)*600/r.height]};
+  cv.onpointerdown=e=>{draw=true;last=pt(e);cv.setPointerCapture(e.pointerId)};
+  cv.onpointermove=e=>{if(!draw)return;const p=pt(e);cx.strokeStyle=col;cx.beginPath();cx.moveTo(...last);cx.lineTo(...p);cx.stroke();last=p};
+  cv.onpointerup=cv.onpointercancel=()=>{draw=false};
+  $("#clr").onclick=()=>{cx.fillStyle="#fff";cx.fillRect(0,0,800,600)};
+  $("#go").onclick=()=>{state.nom=$("#nom").value.trim();done++;next()}}
+/* final */
+function rEnd(el){
+  el.classList.add("calm");
+  el.innerHTML=`<div class="big" aria-hidden="true">🎉</div><h1>Has acabat!</h1>
+   <p style="margin:0">${state.nom?`El teu invent: <b>${state.nom.replace(/[<>&]/g,"")}</b>.`:""} Has fet ${done} activitats.</p>
+   <div class="stars" aria-hidden="true">⭐⭐⭐</div>
+   <p style="margin:0;color:var(--muted)">Ensenya aquesta pantalla al docent o al vetllador.</p>
+   <button class="primary" id="again" type="button" style="align-self:center">Tornar a començar</button>`;
+  $("#again").onclick=()=>{i=0;done=0;state={};render()}}
+/* pausa: amaga l'activitat sense perdre-la */
+const pz=document.createElement("section");pz.className="screen calm";pz.hidden=true;
+pz.innerHTML=`<div class="big" aria-hidden="true">🌿</div><h2>Pausa</h2><div class="breath" aria-hidden="true"></div><p style="margin:0">Respira fort. Agafa aire i deixa'l anar.</p><button class="primary" id="back" type="button" style="align-self:center">Continuar</button>`;
+$("#screen").after(pz);
+$("#pause").onclick=()=>{$("#screen").hidden=true;pz.hidden=false;$("#back").focus()};
+$("#back").onclick=()=>{pz.hidden=true;$("#screen").hidden=false};
+render();
+</script>
+
+</body></html>
